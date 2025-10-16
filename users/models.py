@@ -27,10 +27,29 @@ class profile(models.Model):
     def __str__(self):
         return f"{self.user.phone_number}"
 
-class book(models.Model):
-    title = models.CharField(max_length=255)
-    authors = models.ManyToManyField(admin_user) 
-    published_date = models.DateField()
+
+# class author(models.Model):
+#     name = models.CharField(max_length=100)
+#     phone_number = models.OneToOneField(admin_user, on_delete=models.CASCADE)
     
+
+
+class Author(models.Model):
+    Full_Name = models.CharField(max_length=100,primary_key=True)
+
+    age = models.IntegerField()
+    phone_number = models.CharField(max_length=20)
     def __str__(self):
-        return self.title
+        return self.Full_Name
+
+
+class book(models.Model):
+    authors = models.ManyToManyField(Author)
+    name = models.CharField(max_length=100, default="")
+    published = models.DateField(auto_now_add=True)
+    def __str__(self):
+        return self.name
+    
+
+
+    

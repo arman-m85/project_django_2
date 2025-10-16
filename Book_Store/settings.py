@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from datetime import timedelta
 import django
+import django_extensions
 from django.utils.translation import gettext
 django.utils.translation.ugettext = gettext
 
@@ -37,6 +38,7 @@ AUTH_USER_MODEL = 'users.admin_user'
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

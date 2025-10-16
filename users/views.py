@@ -4,8 +4,8 @@ from django.http import HttpResponse,JsonResponse
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
-from users import serializers
-from users.models import admin_user, book,profile
+# from users import serializers
+from users.models import admin_user,book,profile,Author
 from users.forms import UserForm
 import json 
 from django.shortcuts import render
@@ -14,8 +14,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 
-from users.serializers import ProfileSerializer, book_serializer
+from users.serializers import ProfileSerializer, BookSerializer, AuthorSerializer
 
 
 def home(request):
@@ -71,20 +72,37 @@ def register(request):
 #         return JsonResponse(profiles_list,safe=False )
 
 
-# def get_all_profile(request):
-#     if request.method == "GET":
-#         profiles = profile.objects.all()
-#         return render(request, "profiles.html", {"profiles": profiles})
+def get_all_profile(request):
+    if request.method == "GET":
+        profiles = profile.objects.all()
+        return render(request, "profiles.html", {"profiles": profiles})
 
 class Profiles(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = profile.objects.all()
     serializer_class = ProfileSerializer
-class create_book(generics.CreateAPIView):
+# class create_book(generics.CreateAPIView):
 
 
-    permission_classes = [IsAuthenticated]
+#     permission_classes = [IsAuthenticated]
+#     queryset = book.objects.all()
+#     serializer_class = book_serializer
+#     def create(self, serializer):
+#         serializer.save()
+
+class create_book (generics.CreateAPIView):
+    serializer_class = BookSerializer
+    model = book
+
+
+class author_registration (generics.CreateAPIView):
+    serializer_class = AuthorSerializer
+    model = Author
+
+class author_list (generics.ListAPIView):
+    serializer_class = AuthorSerializer
+    queryset = Author.objects.all()
+
+class book_list (generics.ListAPIView):
+    serializer_class = BookSerializer
     queryset = book.objects.all()
-    serializer_class = book_serializer
-    def perform_create(self, serializer):
-        serializer.save()
